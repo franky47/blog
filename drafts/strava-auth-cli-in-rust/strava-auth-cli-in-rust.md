@@ -650,12 +650,10 @@ match rx.recv().unwrap() {
 
 ## Closing notes
 
-It is to note that this may not follow Rust's best practices in all cases,
-but one must remember that this is a small tool to quickly solve a pain point
-rather than a fully dependable library.
-
-Sometimes it's counterproductive to try and follow all the rules, just as it
-is ill-advised to cut corners for quality open source software.
+While this project is not an example of Rust's best practices (in term of error
+handling, thread synchronization, logging etc..), it shows how straightforward
+it can be to build a quick prototyping tool to solve a pain point in Rust, by
+leveraging the safety of the language and the diversity of the ecosystem.
 
 # Resources
 
