@@ -11,7 +11,7 @@ Here's a summary of the talks I've attended at SnowCamp 2019.
 
 -- by [Edson Yanaga](https://github.com/yanaga)
 
-Yanaga's talk was about the reason ([start with why](https://startwithwhy.com/))
+Edson's talk was about the reason ([start with why](https://startwithwhy.com/))
 behind the move to microservice architectures, emphasizing the misconception
 that they can solve any problem (if not adapted to the problem, they can
 actually make it worse).
@@ -20,7 +20,7 @@ actually make it worse).
 
 -- by [Doug Sillars](https://dougsillars.com)
 
-Sillar's talk on optimising images for the web was focused on the performance
+Doug's talk on optimising images for the web was focused on the performance
 side, how to squeeze those network transfers (size and speed) to a bare minimum
 by delivering appropriate image content depending on the use (device size and
 computing power): there is no need to send pixels that will never be displayed
