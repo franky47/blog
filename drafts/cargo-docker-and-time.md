@@ -53,10 +53,9 @@ Premature-optimisation brain kicked in and said something like:
 It worked. But after a couple of builds, things started going weird.
 
 Instead of running my application, the container would prompt
-`Hello, world!`, and die instantly. WTF ?
-
-I put a ton of logs into the build process to see if the cache was acting
-up, restarted Docker and the host machine, still the problem persisted.
+`Hello, world!`, and die instantly. I put a ton of logs into the
+build process to see if the cache was acting up, restarted Docker and the
+host machine, still the problem persisted.
 
 While following the [5 whys](https://en.wikipedia.org/wiki/5_Whys), it
 turned out one cause of the problem was that cargo was not actually
