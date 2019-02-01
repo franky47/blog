@@ -5,9 +5,9 @@ tags: ['rust', 'docker']
 
 I wanted to package a web application backend written in Rust (using
 [Rocket](https://rocket.rs) as a web server) in a Docker image, for a more
-portable deployment solution (as an alternative to
+portable deployment solution than
 [piping to shell](https://www.seancassidy.me/dont-pipe-to-your-shell.html)
-and distro-specific package managers).
+or distro-specific package managers.
 
 ## Multi-staged builds
 
@@ -23,8 +23,8 @@ feature introduced in Docker 17.05:
 
 Depending on the dependencies used, you might need some externally linked
 C libraries, so bare-metal base images for `runtime` like `scratch` or
-`busybox` might not do the trick. I chose to go for the good old
-`debian:stretch`<sup id="1">[1](#alpine)</sup>.
+`busybox` might not work. I chose to go for the good old `debian:stretch`
+<sup id="1">[1](#alpine)</sup>.
 
 I won't go into the details of the naive approach (build all the
 dependencies and the app code in one step) vs leveraging the cache by first
@@ -48,17 +48,17 @@ COPY ./src ./src
 
 Premature-optimisation brain kicked in and said something like:
 
-> _Hey, we can totally optimise the s\*\*t out of this, no need to delete the sources, as they will be replaced !_
+> _Hey, we can totally optimise this, no need to delete the sources, as they will be replaced !_
 
 It worked. But after a couple of builds, things started going weird.
 
 Instead of running my application, the container would prompt
-`Hello, world!`, and die instantly. I put a ton of logs into the
-build process to see if the cache was acting up, restarted Docker and the
-host machine, still the problem persisted.
+`Hello, world!`, and die instantly. I put some logs into the build
+process to see if the cache was acting up, restarted Docker and the host
+machine, still the problem persisted.
 
-While following the [5 whys](https://en.wikipedia.org/wiki/5_Whys), it
-turned out one cause of the problem was that cargo was not actually
+Following the wisdom of the [5 whys](https://en.wikipedia.org/wiki/5_Whys)
+, it turned out one cause of the problem was that cargo was not actually
 rebuilding the app source code. My initial assumtion when building the
 `Dockerfile` had been:
 
@@ -66,9 +66,9 @@ rebuilding the app source code. My initial assumtion when building the
 
 ## Cargo and `mtime`
 
-As it turns out, Cargo does not use a hash-based mechanism to check for
-modified source files, but keeps track of file modification times instead.
-This is noted in issues
+Cargo does not use a hash-based mechanism to check for modified source
+files, but keeps track of file modification times instead. This is noted
+in issues
 [#6529](https://github.com/rust-lang/cargo/issues/6529) and
 [#2426](https://github.com/rust-lang/cargo/issues/2426).
 
