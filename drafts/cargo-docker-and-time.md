@@ -84,7 +84,56 @@ In Isaac's `Dockerfile`, this was mitigated by deleting the contents of
 
 ## Conclusion
 
-As always:
+Here's the final `Dockerfile` for reference:
+
+```dockerfile
+FROM rustlang/rust:nightly as builder
+
+# Create a shell to build the dependencies
+RUN USER=root cargo init --bin factory
+WORKDIR /factory
+
+# Build only the dependencies (leverage Docker cache)
+COPY Cargo.toml Cargo.lock ./
+RUN cargo build --release
+
+# Copy the project sources & build the project
+COPY . .
+
+# Sometimes cargo does not see that main.rs changed,
+# use `touch` to change the modification date.
+# See https://github.com/rust-lang/cargo/issues/6529
+# and https://github.com/rust-lang/cargo/issues/2426
+RUN touch ./src/main.rs && cargo build --release
+
+# --
+
+FROM debian:stretch
+
+WORKDIR /usr/bin
+
+COPY --from=builder /factory/target/release/stravels .
+
+EXPOSE 8000
+
+ENV                       \
+  ROCKET_ENV=production   \
+  ROCKET_PORT=8000
+
+ENTRYPOINT [ "stravels" ]
+
+```
+
+Using `touch ./src/main.rs` seems to do the trick, since `main.rs` is the
+only file that is common to the empty shell and the app code, all other
+files are new.
+
+Hopefully in the future Cargo will be able to use cryptographic hashes to
+see the content of files did actually change, but the blame can equally be
+placed onto Docker not changing the modification date when overwriting a
+file.
+
+But then again:
 
 > _Premature optimisation is the root of all evil._
 >
