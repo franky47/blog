@@ -37,7 +37,7 @@ building dependencies, then the app code, there's an
 [excellent article](https://whitfin.io/speeding-up-rust-docker-builds/) by
 [Isaac Whitfield](https://keybase.io/whitfin) that does just that.
 
-I would like instead to tell you the story of a 3:00am bug that really
+I would like instead to tell you the story of a 3:00 am bug that really
 scratched my head.
 
 I was replicating the steps that Isaac took to build his `Dockerfile` to
@@ -51,7 +51,7 @@ COPY ./src ./src
 
 Premature-optimisation brain kicked in and said something like:
 
-> _hey, we can totally optimise the s\*\*t out of this, no need to delete the sources, as they will be replaced !_
+> _Hey, we can totally optimise the s\*\*t out of this, no need to delete the sources, as they will be replaced !_
 
 It worked. But after a couple of builds, things started going weird.
 
@@ -63,9 +63,9 @@ restarted Docker and the host machine, still the problem persisted.
 
 While following the [5 whys](https://en.wikipedia.org/wiki/5_Whys), it
 turned out one cause of the problem was that cargo was not actually
-rebuilding the app source code. My initial assumtion when building the
-`Dockerfile` was that
-_"the sources changed, therefore cargo will see it and rebuild them"_.
+rebuilding the app source code. My initial assumtion when building the `Dockerfile` had been:
+
+> _The sources changed, therefore cargo will see it and rebuild them._
 
 As it turns out, Cargo does not use a hash-based mechanism to check for
 modified source files, but keeps track of file modification times instead.
