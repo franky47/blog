@@ -11,26 +11,26 @@ or distro-specific package managers.
 
 ## Multi-staged builds
 
-Since Rust compiles to an executable binary, there is no need to embark the
-whole language into the runtime image, we can leverage the
+Since Rust compiles to an executable binary, there is no need to bring the
+whole compiler toolchain into the runtime image, we can leverage the
 [multi-staged build](https://blog.alexellis.io/mutli-stage-docker-builds/)
 feature introduced in Docker 17.05:
 
-- a `builder` image that contains the Rust compiler and transforms your
+- a `builder` image that contains the Rust compiler and transforms the
   sources into a binary executable
 - a `runtime` image that only contains the final executable and runtime
   parameters (environment, ports, volumes etc)
 
-Depending on the dependencies used, you might need some externally linked
-C libraries, so bare-metal base images for `runtime` like `scratch` or
-`busybox` might not work. I chose to go for the good old `debian:stretch`
+Depending on the dependencies used, some externally-linked C libraries
+might be needed at runtime, so bare-metal base images like `scratch` or
+`busybox` may not work. I chose to go for the good old `debian:stretch`
 <sup id="1">[1](#alpine)</sup>.
 
 I won't go into the details of the naive approach (build all the
-dependencies and the app code in one step) vs leveraging the cache by first
-building dependencies, then the app code, there's an
+dependencies and the app code in one step) vs leveraging the cache by
+first building dependencies, then the app code, it's explained in an
 [excellent article](https://whitfin.io/speeding-up-rust-docker-builds/) by
-[Isaac Whitfield](https://keybase.io/whitfin) that does just that.
+[Isaac Whitfield](https://keybase.io/whitfin).
 
 I would like instead to tell the story of a 3:00 am bug that really
 scratched my head.
