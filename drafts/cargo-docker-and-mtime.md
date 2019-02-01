@@ -48,7 +48,7 @@ COPY ./src ./src
 
 Premature-optimisation brain kicked in and said something like:
 
-> _Hey, we can totally optimise this, no need to delete the sources, as they will be replaced !_
+> _Hey, we can totally optimise this, no need to delete the sources, they will be replaced anyway._
 
 It worked. But after a couple of builds, things started going weird.
 
@@ -57,9 +57,9 @@ Instead of running my application, the container would prompt
 process to see if the cache was acting up, restarted Docker and the host
 machine, still the problem persisted.
 
-Following the wisdom of the [5 whys](https://en.wikipedia.org/wiki/5_Whys)
-, it turned out one cause of the problem was that cargo was not actually
-rebuilding the app source code. My initial assumtion when building the
+Following the wisdom of the [5 whys](https://en.wikipedia.org/wiki/5_Whys),
+it turned out one cause of the problem was that cargo was not actually
+rebuilding the app source code. My initial assumtion when "optimising" the
 `Dockerfile` had been:
 
 > _The sources changed, therefore cargo will see it and rebuild them._
@@ -132,7 +132,7 @@ see the content of files did actually change, but the blame can equally be
 placed onto Docker not changing the modification date when overwriting a
 file.
 
-But then again:
+But most of all:
 
 > _Premature optimisation is the root of all evil._
 >
